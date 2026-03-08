@@ -4,11 +4,11 @@
 <head>
 <title>테스트 사이트</title>
 
-<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.0/SCDream.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSans.css" rel="stylesheet">
 
 <style>
 body{text-align:center;
-    font-family: "SCDream", sans-serif;
+    font-family: "Gmarket Sans", sans-serif;
 }
 
 textarea{
@@ -18,10 +18,11 @@ textarea{
 }
 
 #posts{
+    width:1000px;
+    margin:30px auto;
     display:grid;
     grid-template-columns: repeat(3, 300px);
-    gap:20px;
-    justify-content:center;
+    justify-content:space-between;
 }
 
 .post{
@@ -41,7 +42,7 @@ button{
 <body>
 
 <h1>익명 보장! 아무말 게시판</h1>
-<p>일 하지말고 월루해라😊~</p>
+<p>욕설 가능! 일 하지말고 월루 해라😊</p>
 
 <textarea id="text"></textarea><br>
 <button onclick="addPost()">등록</button>
@@ -143,6 +144,7 @@ renderPosts()
 
 </body>
 </html>
+
 
 
 
