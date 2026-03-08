@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-<meta charset="UTF-8">
-<title>테스트 사이트</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-
 <style>
 
 body{
@@ -21,7 +12,7 @@ textarea{
 }
 
 button{
-    margin:5px;
+    margin-top:100px;
     padding:8px 15px;
 }
 
@@ -41,65 +32,8 @@ button{
     border-radius:8px;
 }
 
-/* 네온 버튼 */
-
-.neon-btn{
-  position:relative;
-  padding:10px 25px;
-  font-size:16px;
-  color:white;
-  background:black;
-  border:none;
-  cursor:pointer;
-  border-radius:8px;
-  overflow:hidden;
-  transition:0.3s;
-}
-
-.neon-btn span{
-  position:relative;
-  z-index:2;
-}
-
-.neon-btn::before{
-  content:"";
-  position:absolute;
-  top:-2px;
-  left:-2px;
-  right:-2px;
-  bottom:-2px;
-  background:linear-gradient(
-    45deg,
-    #ff0000,
-    #ff7300,
-    #fffb00,
-    #48ff00,
-    #00ffd5,
-    #002bff,
-    #7a00ff,
-    #ff00c8,
-    #ff0000
-  );
-  background-size:400%;
-  filter:blur(6px);
-  z-index:1;
-  opacity:0;
-  transition:opacity 0.3s;
-  animation:neonGlow 20s linear infinite;
-}
-
-.neon-btn:hover::before{
-  opacity:1;
-}
-
-.neon-btn:hover{
-  transform:translateY(-2px);
-}
-
-@keyframes neonGlow{
-  0%{background-position:0 0;}
-  50%{background-position:400% 0;}
-  100%{background-position:0 0;}
+button{
+    margin:5px;
 }
 
 #typing{
@@ -107,134 +41,78 @@ button{
     color:#555;
 }
 
+/* 좋아요 버튼 */
+.like-btn{
+    background:#e5e7eb;
+    border:none;
+    padding:5px 10px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* 삭제 버튼 */
+.delete-btn{
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:5px 10px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* 네온 버튼 */
+.neon-btn{
+    position:relative;
+    padding:10px 25px;
+    font-size:16px;
+    color:white;
+    background:black;
+    border:none;
+    cursor:pointer;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+/* 네온 효과 */
+.neon-btn::before{
+    content:"";
+    position:absolute;
+    top:-2px;
+    left:-2px;
+    right:-2px;
+    bottom:-2px;
+    background:linear-gradient(
+        45deg,
+        #ff0000,
+        #ff7300,
+        #fffb00,
+        #48ff00,
+        #00ffd5,
+        #002bff,
+        #7a00ff,
+        #ff00c8,
+        #ff0000
+    );
+    background-size:400%;
+    filter:blur(6px);
+    z-index:-1;
+    opacity:0;
+    transition:0.3s;
+    animation:neonGlow 20s linear infinite;
+}
+
+.neon-btn:hover::before{
+    opacity:1;
+}
+
+/* 애니메이션 */
+@keyframes neonGlow{
+    0%{background-position:0 0;}
+    50%{background-position:400% 0;}
+    100%{background-position:0 0;}
+}
+
 </style>
-
-</head>
-
-<body>
-
-<h1>익명 보장! 아무말 게시판</h1>
-<p id="typing"></p>
-
-<textarea id="text"></textarea><br>
-
-<button class="neon-btn" onclick="addPost()">
-<span>등록</span>
-</button>
-
-<div id="posts"></div>
-
-<script>
-
-/* 타이핑 효과 */
-
-const text = "욕설 가능! 일 하지말고 월루 해라 😊";
-const typingElement = document.getElementById("typing");
-
-let index = 0;
-
-function type(){
-    if(index < text.length){
-        typingElement.innerHTML += text.charAt(index);
-        index++;
-        setTimeout(type,80);
-    }
-}
-
-type();
-
-/* 게시판 기능 */
-
-let nicknames = [
-"화난참치","지친고양이","분노한햄스터",
-"야근요정","퇴사마려움","슬픈판다",
-"피곤한너구리","현타온곰"
-]
-
-let posts = JSON.parse(localStorage.getItem("posts")) || []
-
-function savePosts(){
-    localStorage.setItem("posts", JSON.stringify(posts))
-}
-
-function renderPosts(){
-
-    document.getElementById("posts").innerHTML=""
-
-    posts.forEach((post,index)=>{
-
-        let postDiv = document.createElement("div")
-        postDiv.className="post"
-
-        let name = document.createElement("b")
-        name.innerText = post.nickname
-
-        let textDiv = document.createElement("div")
-        textDiv.innerText = post.text
-
-        let likeBtn = document.createElement("button")
-        likeBtn.innerText = "👍 " + post.likes
-
-        likeBtn.onclick = function(){
-            post.likes++
-            savePosts()
-            renderPosts()
-        }
-
-        let deleteBtn = document.createElement("button")
-        deleteBtn.innerText="Delete"
-
-        deleteBtn.onclick=function(){
-            posts.splice(index,1)
-            savePosts()
-            renderPosts()
-        }
-
-        postDiv.appendChild(name)
-        postDiv.appendChild(document.createElement("br"))
-        postDiv.appendChild(textDiv)
-        postDiv.appendChild(likeBtn)
-        postDiv.appendChild(deleteBtn)
-
-        document.getElementById("posts").appendChild(postDiv)
-
-    })
-
-}
-
-function addPost(){
-
-    let text = document.getElementById("text").value
-
-    if(text===""){
-        return
-    }
-
-    let randomName = nicknames[Math.floor(Math.random()*nicknames.length)]
-
-    let newPost = {
-        nickname: randomName,
-        text: text,
-        likes: 0
-    }
-
-    posts.unshift(newPost)
-
-    savePosts()
-
-    renderPosts()
-
-    document.getElementById("text").value=""
-
-}
-
-renderPosts()
-
-</script>
-
-</body>
-</html>
-
 
 
 
