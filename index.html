@@ -23,6 +23,7 @@ textarea{
 button{
     margin-top:100px;
     padding:8px 15px;
+    margin:5px;
 }
     
 #posts{
@@ -41,44 +42,47 @@ button{
     border-radius:8px;
 }
 
-button{
-    margin:5px;
+.neon-btn{
+  position:relative;
+  padding:10px 25px;
+  font-size:16px;
+  color:white;
+  background:pink;
+  border:none;
+  cursor:pointer;
+  border-radius:8px;
+  overflow:hidden;
 }
 
-.post-btn{
-    background:#4f46e5;
-    color:white;
-    border:none;
-    padding:10px 22px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:0.2s;
+.neon-btn::before{
+  content:"";
+  position:absolute;
+  top:-2px;
+  left:-2px;
+  right:-2px;
+  bottom:-2px;
+  background:linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  background-size:400%;
+  filter:blur(6px);
+  z-index:-1;
+  animation:neonGlow 20s linear infinite;
 }
 
-.post-btn:hover{
-    background:#4338ca;
-    transform:translateY(-2px);
-}
-#typing{
-    margin-top:10px;
-    color:#555;
-}
-
-.like-btn{
-    background:#e5e7eb;
-    border:none;
-    padding:5px 10px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.delete-btn{
-    background:#ef4444;
-    color:white;
-    border:none;
-    padding:5px 10px;
-    border-radius:6px;
-    cursor:pointer;
+@keyframes neonGlow{
+  0%{background-position:0 0;}
+  50%{background-position:400% 0;}
+  100%{background-position:0 0;}
 }
 
 </style>
@@ -91,7 +95,9 @@ button{
 <p id="typing"></p>
 
 <textarea id="text"></textarea><br>
-<button class="post-btn" onclick="addPost()">등록</button>
+<button class="neon-btn" onclick="addPost()">
+  <span>등록</span>
+</button>
 
 <div id="posts"></div>
 
@@ -206,6 +212,7 @@ renderPosts()
 
 </body>
 </html>
+
 
 
 
