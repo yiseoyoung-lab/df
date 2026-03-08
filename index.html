@@ -91,6 +91,65 @@ button{
  to{ transform:rotate(360deg); }
 }
 
+/* CodePen neon button */
+
+.button{
+  --bg:#ff8fb1;
+  --radius:10px;
+
+  position:relative;
+  padding:12px 28px;
+  border:none;
+  border-radius:var(--radius);
+  background:var(--bg);
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .2s;
+}
+
+.button:hover{
+  transform:scale(1.08);
+}
+
+.button-text{
+  position:relative;
+  z-index:2;
+  color:white;
+  font-weight:600;
+}
+
+/* shimmer layer */
+
+.shimmer{
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+}
+
+/* spinning neon border */
+
+.neon-button[data-effect="spin"] .shimmer::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:inherit;
+
+  background:conic-gradient(
+    from 0deg,
+    transparent,
+    white,
+    transparent
+  );
+
+  animation:neon-spin 2s linear infinite;
+}
+
+@keyframes neon-spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
 </style>
 </head>
 
@@ -101,9 +160,9 @@ button{
 
 <textarea id="text"></textarea><br>
 
-<button class="neon-btn" onclick="addPost()" data-effect="spin">
-<span class="text">등록</span>
-<span class="shimmer"></span>
+<button class="button neon-button" onclick="addPost()" data-effect="spin">
+  <span class="button-text">등록</span>
+  <span class="shimmer"></span>
 </button>
 
 <div id="posts"></div>
@@ -218,6 +277,7 @@ renderPosts()
 
 </body>
 </html>
+
 
 
 
