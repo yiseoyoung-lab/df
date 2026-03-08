@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <style>
+
 body{
     text-align:center;
     font-family:'Pretendard', sans-serif;
@@ -36,12 +37,19 @@ button{
     border:1px solid #ccc;
     width:300px;
     padding:10px;
-    margin-top:10px
+    margin-top:10px;
+    border-radius:8px;
 }
 
 button{
     margin:5px;
 }
+
+#typing{
+    margin-top:10px;
+    color:#555;
+}
+
 </style>
 
 </head>
@@ -51,31 +59,32 @@ button{
 <h1>익명 보장! 아무말 게시판</h1>
 <p id="typing"></p>
 
-<textarea></textarea>
-<button>등록</button>
-
-<div id="posts"></div>
-
-<script>
-const text = "욕설 가능! 일 하지말고 월루 해라😊";
-const typingElement = document.getElementById("typing");
-
-let index = 0;
-
-function type() {
-    if (index < text.length) {
-        typingElement.innerHTML += text.charAt(index);
-        index++;
-        setTimeout(type, 80);
-    }
-}
-
 <textarea id="text"></textarea><br>
 <button onclick="addPost()">등록</button>
 
 <div id="posts"></div>
 
 <script>
+
+/* 타이핑 효과 */
+
+const text = "욕설 가능! 일 하지말고 월루 해라 😊";
+const typingElement = document.getElementById("typing");
+
+let index = 0;
+
+function type(){
+    if(index < text.length){
+        typingElement.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(type,80);
+    }
+}
+
+type();
+
+
+/* 게시판 기능 */
 
 let nicknames = [
 "화난참치","지친고양이","분노한햄스터",
@@ -86,77 +95,77 @@ let nicknames = [
 let posts = JSON.parse(localStorage.getItem("posts")) || []
 
 function savePosts(){
-localStorage.setItem("posts", JSON.stringify(posts))
+    localStorage.setItem("posts", JSON.stringify(posts))
 }
 
 function renderPosts(){
 
-document.getElementById("posts").innerHTML=""
+    document.getElementById("posts").innerHTML=""
 
-posts.forEach((post,index)=>{
+    posts.forEach((post,index)=>{
 
-let postDiv = document.createElement("div")
-postDiv.className="post"
+        let postDiv = document.createElement("div")
+        postDiv.className="post"
 
-let name = document.createElement("b")
-name.innerText = post.nickname
+        let name = document.createElement("b")
+        name.innerText = post.nickname
 
-let text = document.createElement("div")
-text.innerText = post.text
+        let textDiv = document.createElement("div")
+        textDiv.innerText = post.text
 
-let likeBtn = document.createElement("button")
-likeBtn.innerText = "👍 "+post.likes
+        let likeBtn = document.createElement("button")
+        likeBtn.innerText = "👍 " + post.likes
 
-likeBtn.onclick = function(){
-post.likes++
-savePosts()
-renderPosts()
-}
+        likeBtn.onclick = function(){
+            post.likes++
+            savePosts()
+            renderPosts()
+        }
 
-let deleteBtn = document.createElement("button")
-deleteBtn.innerText="Delete"
+        let deleteBtn = document.createElement("button")
+        deleteBtn.innerText="Delete"
 
-deleteBtn.onclick=function(){
-posts.splice(index,1)
-savePosts()
-renderPosts()
-}
+        deleteBtn.onclick=function(){
+            posts.splice(index,1)
+            savePosts()
+            renderPosts()
+        }
 
-postDiv.appendChild(name)
-postDiv.appendChild(document.createElement("br"))
-postDiv.appendChild(text)
-postDiv.appendChild(likeBtn)
-postDiv.appendChild(deleteBtn)
+        postDiv.appendChild(name)
+        postDiv.appendChild(document.createElement("br"))
+        postDiv.appendChild(textDiv)
+        postDiv.appendChild(likeBtn)
+        postDiv.appendChild(deleteBtn)
 
-document.getElementById("posts").appendChild(postDiv)
+        document.getElementById("posts").appendChild(postDiv)
 
-})
+    })
 
 }
 
 function addPost(){
 
-let text=document.getElementById("text").value
+    let text = document.getElementById("text").value
 
-if(text===""){
-return
-}
+    if(text===""){
+        return
+    }
 
-let randomName = nicknames[Math.floor(Math.random()*nicknames.length)]
+    let randomName = nicknames[Math.floor(Math.random()*nicknames.length)]
 
-let newPost = {
-nickname: randomName,
-text: text,
-likes: 0
-}
+    let newPost = {
+        nickname: randomName,
+        text: text,
+        likes: 0
+    }
 
-posts.unshift(newPost)
+    posts.unshift(newPost)
 
-savePosts()
+    savePosts()
 
-renderPosts()
+    renderPosts()
 
-document.getElementById("text").value=""
+    document.getElementById("text").value=""
 
 }
 
@@ -166,25 +175,3 @@ renderPosts()
 
 </body>
 </html>
-</script>
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
