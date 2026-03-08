@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>이서영 사이트</title>
+<title>이서영 테스트 사이트</title>
 
 <style>
 body{
@@ -16,18 +16,15 @@ textarea{
     margin-top:20px;
 }
 
-button{
-    margin-top:10px;
-    padding:6px 15px;
+.post{
+    border:1px solid #ccc;
+    width:300px;
+    margin:10px auto;
+    padding:10px;
 }
 
-.post{
-    margin-top:10px;
-    border:1px solid #ccc;
-    padding:10px;
-    width:300px;
-    margin-left:auto;
-    margin-right:auto;
+button{
+    margin:5px;
 }
 </style>
 
@@ -44,37 +41,96 @@ button{
 <div id="posts"></div>
 
 <script>
+
+let nicknames = [
+"화난참치","지친고양이","분노한햄스터",
+"야근요정","퇴사마려움","슬픈판다",
+"피곤한너구리","현타온곰"
+]
+
+let posts = JSON.parse(localStorage.getItem("posts")) || []
+
+function savePosts(){
+localStorage.setItem("posts", JSON.stringify(posts))
+}
+
+function renderPosts(){
+
+document.getElementById("posts").innerHTML=""
+
+posts.forEach((post,index)=>{
+
+let postDiv = document.createElement("div")
+postDiv.className="post"
+
+let name = document.createElement("b")
+name.innerText = post.nickname
+
+let text = document.createElement("div")
+text.innerText = post.text
+
+let likeBtn = document.createElement("button")
+likeBtn.innerText = "👍 "+post.likes
+
+likeBtn.onclick = function(){
+post.likes++
+savePosts()
+renderPosts()
+}
+
+let deleteBtn = document.createElement("button")
+deleteBtn.innerText="Delete"
+
+deleteBtn.onclick=function(){
+posts.splice(index,1)
+savePosts()
+renderPosts()
+}
+
+postDiv.appendChild(name)
+postDiv.appendChild(document.createElement("br"))
+postDiv.appendChild(text)
+postDiv.appendChild(likeBtn)
+postDiv.appendChild(deleteBtn)
+
+document.getElementById("posts").appendChild(postDiv)
+
+})
+
+}
+
 function addPost(){
 
-let text = document.getElementById("text").value
+let text=document.getElementById("text").value
 
-if(text === ""){
-    return
+if(text===""){
+return
 }
 
-let post = document.createElement("div")
-post.className = "post"
+let randomName = nicknames[Math.floor(Math.random()*nicknames.length)]
 
-// 글 내용
-let content = document.createElement("div")
-content.innerText = text
-
-// 삭제 버튼
-let delBtn = document.createElement("button")
-delBtn.innerText = "Delete"
-
-delBtn.onclick = function(){
-    post.remove()
+let newPost = {
+nickname: randomName,
+text: text,
+likes: 0
 }
 
-post.appendChild(content)
-post.appendChild(delBtn)
+posts.unshift(newPost)
 
-document.getElementById("posts").prepend(post)
+savePosts()
 
-document.getElementById("text").value = ""
+renderPosts()
+
+document.getElementById("text").value=""
 
 }
+
+renderPosts()
+
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
