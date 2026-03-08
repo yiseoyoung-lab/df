@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>My site</title>
+<title>이서영 사이트</title>
 
 <style>
 body{
@@ -18,7 +18,7 @@ textarea{
 
 button{
     margin-top:10px;
-    padding:8px 20px;
+    padding:6px 15px;
 }
 
 .post{
@@ -54,7 +54,21 @@ if(text === ""){
 
 let post = document.createElement("div")
 post.className = "post"
-post.innerText = text
+
+// 글 내용
+let content = document.createElement("div")
+content.innerText = text
+
+// 삭제 버튼
+let delBtn = document.createElement("button")
+delBtn.innerText = "Delete"
+
+delBtn.onclick = function(){
+    post.remove()
+}
+
+post.appendChild(content)
+post.appendChild(delBtn)
 
 document.getElementById("posts").prepend(post)
 
@@ -65,4 +79,3 @@ document.getElementById("text").value = ""
 
 </body>
 </html>
-
