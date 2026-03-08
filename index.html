@@ -44,53 +44,60 @@ button{
 /* 네온 버튼 */
 
 .neon-btn{
-    position:relative;
-    padding:10px 25px;
-    font-size:16px;
-    color:white;
-    background:black;
-    border:none;
-    cursor:pointer;
-    border-radius:8px;
-    overflow:hidden;
+  position:relative;
+  padding:10px 25px;
+  font-size:16px;
+  color:white;
+  background:#111;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  z-index:0;
 }
 
-.neon-btn span{
-    position:relative;
-    z-index:2;
+.neon-btn:before{
+  content:'';
+  background:linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position:absolute;
+  top:-2px;
+  left:-2px;
+  background-size:400%;
+  z-index:-1;
+  filter:blur(5px);
+  width:calc(100% + 4px);
+  height:calc(100% + 4px);
+  animation:glowing 20s linear infinite;
+  opacity:1;
+  border-radius:8px;
 }
 
-/* 네온 glow */
-
-.neon-btn::before{
-    content:"";
-    position:absolute;
-    top:-3px;
-    left:-3px;
-    right:-3px;
-    bottom:-3px;
-    background:linear-gradient(
-        45deg,
-        #ff0000,
-        #ff7300,
-        #fffb00,
-        #48ff00,
-        #00ffd5,
-        #002bff,
-        #7a00ff,
-        #ff00c8,
-        #ff0000
-    );
-    background-size:400%;
-    filter:blur(8px);
-    animation:neonGlow 20s linear infinite;
-    z-index:1;
+.neon-btn:after{
+  z-index:-1;
+  content:'';
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#111;
+  left:0;
+  top:0;
+  border-radius:8px;
 }
 
-@keyframes neonGlow{
-    0%{background-position:0 0;}
-    50%{background-position:400% 0;}
-    100%{background-position:0 0;}
+@keyframes glowing{
+  0%{background-position:0 0;}
+  50%{background-position:400% 0;}
+  100%{background-position:0 0;}
 }
 
 </style>
@@ -219,6 +226,7 @@ renderPosts()
 
 </body>
 </html>
+
 
 
 
