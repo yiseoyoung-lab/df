@@ -21,11 +21,10 @@ textarea{
 }
 
 button{
-    margin-top:100px;
-    padding:8px 15px;
     margin:5px;
+    padding:8px 15px;
 }
-    
+
 #posts{
     width:1000px;
     margin:10px auto;
@@ -42,16 +41,24 @@ button{
     border-radius:8px;
 }
 
+/* 네온 버튼 */
+
 .neon-btn{
   position:relative;
   padding:10px 25px;
   font-size:16px;
   color:white;
-  background:pink;
+  background:black;
   border:none;
   cursor:pointer;
   border-radius:8px;
   overflow:hidden;
+  transition:0.3s;
+}
+
+.neon-btn span{
+  position:relative;
+  z-index:2;
 }
 
 .neon-btn::before{
@@ -75,14 +82,29 @@ button{
   );
   background-size:400%;
   filter:blur(6px);
-  z-index:-1;
+  z-index:1;
+  opacity:0;
+  transition:opacity 0.3s;
   animation:neonGlow 20s linear infinite;
+}
+
+.neon-btn:hover::before{
+  opacity:1;
+}
+
+.neon-btn:hover{
+  transform:translateY(-2px);
 }
 
 @keyframes neonGlow{
   0%{background-position:0 0;}
   50%{background-position:400% 0;}
   100%{background-position:0 0;}
+}
+
+#typing{
+    margin-top:10px;
+    color:#555;
 }
 
 </style>
@@ -95,8 +117,9 @@ button{
 <p id="typing"></p>
 
 <textarea id="text"></textarea><br>
+
 <button class="neon-btn" onclick="addPost()">
-  <span>등록</span>
+<span>등록</span>
 </button>
 
 <div id="posts"></div>
@@ -119,7 +142,6 @@ function type(){
 }
 
 type();
-
 
 /* 게시판 기능 */
 
