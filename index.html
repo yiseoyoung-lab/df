@@ -1,14 +1,68 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <title>My site</title>
+
+<style>
+body{
+    text-align:center;
+    font-family:sans-serif;
+}
+
+textarea{
+    width:300px;
+    height:80px;
+    margin-top:20px;
+}
+
+button{
+    margin-top:10px;
+    padding:8px 20px;
+}
+
+.post{
+    margin-top:10px;
+    border:1px solid #ccc;
+    padding:10px;
+    width:300px;
+    margin-left:auto;
+    margin-right:auto;
+}
+</style>
+
 </head>
 
 <body>
+
 <h1>비밀 보장! 욕설 게시판</h1>
 <p>회사 욕해라~</p>
+
+<textarea id="text"></textarea><br>
+<button onclick="addPost()">등록</button>
+
+<div id="posts"></div>
+
+<script>
+function addPost(){
+
+let text = document.getElementById("text").value
+
+if(text === ""){
+    return
+}
+
+let post = document.createElement("div")
+post.className = "post"
+post.innerText = text
+
+document.getElementById("posts").prepend(post)
+
+document.getElementById("text").value = ""
+
+}
+</script>
+
 </body>
-
-
 </html>
 
