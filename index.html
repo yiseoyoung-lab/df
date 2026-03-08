@@ -49,7 +49,26 @@ button{
 <body>
 
 <h1>익명 보장! 아무말 게시판</h1>
-<p>욕설 가능! 일 하지말고 월루 해라😊</p>
+<p id="typing"></p>
+
+<textarea></textarea>
+<button>등록</button>
+
+<div id="posts"></div>
+
+<script>
+const text = "욕설 가능! 일 하지말고 월루 해라😊";
+const typingElement = document.getElementById("typing");
+
+let index = 0;
+
+function type() {
+    if (index < text.length) {
+        typingElement.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(type, 80);
+    }
+}
 
 <textarea id="text"></textarea><br>
 <button onclick="addPost()">등록</button>
@@ -151,6 +170,7 @@ renderPosts()
 
 </body>
 </html>
+
 
 
 
