@@ -7,147 +7,91 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <style>
-
-body{
-    text-align:center;
-    font-family:'Pretendard', sans-serif;
+body {
+    text-align: center;
+    font-family: 'Pretendard', sans-serif;
 }
 
-textarea{
-    width:1000px;
-    height:80px;
-    margin-top:20px;
+textarea {
+    width: 1000px;
+    height: 80px;
+    margin-top: 20px;
 }
 
-button{
-    margin-top:100px;
-    padding:8px 15px;
-    margin:5px;
+button {
+    margin: 5px;
+    padding: 8px 15px;
 }
 
-#posts{
-    width:1000px;
-    margin:10px auto;
-    display:grid;
+#posts {
+    width: 1000px;
+    margin: 10px auto;
+    display: grid;
     grid-template-columns: repeat(3, 300px);
-    justify-content:space-between;
+    justify-content: space-between;
 }
 
-.post{
-    border:1px solid #ccc;
-    width:300px;
-    padding:10px;
-    margin-top:10px;
-    border-radius:8px;
+.post {
+    border: 1px solid #ccc;
+    width: 300px;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
 }
 
-/* 네온 버튼 */
-.neon-btn{
-  position:relative;
-  padding:12px 28px;
-  font-size:16px;
-  color:white;
-  background:pink;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  overflow:hidden;
-  transition:transform .2s;
+/* ------------------ 네온 버튼 ------------------ */
+.button {
+    --bg: #ff8fb1;
+    --radius: 12px;
+    position: relative;
+    padding: 12px 28px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--bg);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s;
 }
 
-/* hover 커짐 */
-.neon-btn:hover{
-  transform:scale(1.08);
+.button:hover {
+    transform: scale(1.08);
 }
 
-/* 네온 테두리 */
-.neon-btn::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  padding:2px;
-  border-radius:12px;
-
-  background:conic-gradient(
-    from 0deg,
-    transparent,
-    white,
-    transparent
-  );
-
-  animation:spin 2s linear infinite;
-
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-}
-
-@keyframes spin{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
-}
-
-/* CodePen neon button */
-
-.button{
-  --bg:#ff8fb1;
-  --radius:10px;
-
-  position:relative;
-  padding:12px 28px;
-  border:none;
-  border-radius:var(--radius);
-  background:var(--bg);
-  cursor:pointer;
-  overflow:hidden;
-  transition:transform .2s;
-}
-
-.button:hover{
-  transform:scale(1.08);
-}
-
-.button-text{
-  position:relative;
-  z-index:2;
-  color:white;
-  font-weight:600;
+.button-text {
+    position: relative;
+    z-index: 2;
+    color: white;
+    font-weight: 600;
 }
 
 /* shimmer layer */
-
-.shimmer{
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  pointer-events:none;
+.shimmer {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
 }
 
 /* spinning neon border */
-
-.neon-button[data-effect="spin"] .shimmer::before{
-  content:"";
-  position:absolute;
-  inset:-3px;
-  border-radius:inherit;
-
-  background:conic-gradient(
-    from 0deg,
-    transparent,
-    white,
-    transparent
-  );
-
-  animation:neon-spin 2s linear infinite;
+.neon-button[data-effect="spin"] .shimmer::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    background: conic-gradient(from 0deg, transparent, white, transparent);
+    animation: neon-spin 2s linear infinite;
 }
 
-@keyframes neon-spin{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
+@keyframes neon-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
+/* ------------------ 타이핑 효과 ------------------ */
+#typing {
+    font-size: 18px;
+    margin-top: 20px;
+}
 </style>
 </head>
 
@@ -156,7 +100,7 @@ button{
 <h1>익명 보장! 아무말 게시판</h1>
 <p id="typing"></p>
 
-<textarea id="text"></textarea><br>
+<textarea id="text" placeholder="여기에 글을 입력하세요..."></textarea><br>
 
 <button class="button neon-button" onclick="addPost()" data-effect="spin">
   <span class="button-text">등록</span>
@@ -166,119 +110,93 @@ button{
 <div id="posts"></div>
 
 <script>
-
-/* 타이핑 효과 */
-
+/* ------------------ 타이핑 효과 ------------------ */
 const text = "욕설 가능! 일 하지말고 월루 해라 😊";
 const typingElement = document.getElementById("typing");
-
 let index = 0;
 
-function type(){
- if(index < text.length){
-  typingElement.innerHTML += text.charAt(index);
-  index++;
-  setTimeout(type,80);
- }
+function type() {
+    if (index < text.length) {
+        typingElement.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(type, 80);
+    }
 }
-
 type();
 
-/* 게시판 기능 */
-
+/* ------------------ 게시판 기능 ------------------ */
 let nicknames = [
-"화난참치","지친고양이","분노한햄스터",
-"야근요정","퇴사마려움","슬픈판다",
-"피곤한너구리","현타온곰"
-]
+    "화난참치","지친고양이","분노한햄스터",
+    "야근요정","퇴사마려움","슬픈판다",
+    "피곤한너구리","현타온곰"
+];
 
-let posts = JSON.parse(localStorage.getItem("posts")) || []
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
 
-function savePosts(){
- localStorage.setItem("posts", JSON.stringify(posts))
+function savePosts() {
+    localStorage.setItem("posts", JSON.stringify(posts));
 }
 
-function renderPosts(){
+function renderPosts() {
+    const postsContainer = document.getElementById("posts");
+    postsContainer.innerHTML = "";
 
- document.getElementById("posts").innerHTML=""
+    posts.forEach((post, index) => {
+        const postDiv = document.createElement("div");
+        postDiv.className = "post";
 
- posts.forEach((post,index)=>{
+        const name = document.createElement("b");
+        name.innerText = post.nickname;
 
-  let postDiv = document.createElement("div")
-  postDiv.className="post"
+        const textDiv = document.createElement("div");
+        textDiv.innerText = post.text;
 
-  let name = document.createElement("b")
-  name.innerText = post.nickname
+        const likeBtn = document.createElement("button");
+        likeBtn.innerText = "👍 " + post.likes;
+        likeBtn.onclick = function() {
+            post.likes++;
+            savePosts();
+            renderPosts();
+        };
 
-  let textDiv = document.createElement("div")
-  textDiv.innerText = post.text
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Delete";
+        deleteBtn.onclick = function() {
+            posts.splice(index, 1);
+            savePosts();
+            renderPosts();
+        };
 
-  let likeBtn = document.createElement("button")
-  likeBtn.innerText = "👍 " + post.likes
+        postDiv.appendChild(name);
+        postDiv.appendChild(document.createElement("br"));
+        postDiv.appendChild(textDiv);
+        postDiv.appendChild(likeBtn);
+        postDiv.appendChild(deleteBtn);
 
-  likeBtn.onclick = function(){
-   post.likes++
-   savePosts()
-   renderPosts()
-  }
-
-  let deleteBtn = document.createElement("button")
-  deleteBtn.innerText="Delete"
-
-  deleteBtn.onclick=function(){
-   posts.splice(index,1)
-   savePosts()
-   renderPosts()
-  }
-
-  postDiv.appendChild(name)
-  postDiv.appendChild(document.createElement("br"))
-  postDiv.appendChild(textDiv)
-  postDiv.appendChild(likeBtn)
-  postDiv.appendChild(deleteBtn)
-
-  document.getElementById("posts").appendChild(postDiv)
-
- })
-
+        postsContainer.appendChild(postDiv);
+    });
 }
 
-function addPost(){
+function addPost() {
+    let text = document.getElementById("text").value.trim();
+    if (text === "") return;
 
- let text = document.getElementById("text").value
+    let randomName = nicknames[Math.floor(Math.random() * nicknames.length)];
 
- if(text===""){
-  return
- }
+    let newPost = { nickname: randomName, text: text, likes: 0 };
+    posts.unshift(newPost);
 
- let randomName = nicknames[Math.floor(Math.random()*nicknames.length)]
+    savePosts();
+    renderPosts();
 
- let newPost = {
-  nickname: randomName,
-  text: text,
-  likes: 0
- }
-
- posts.unshift(newPost)
-
- savePosts()
-
- renderPosts()
-
- document.getElementById("text").value=""
-
+    document.getElementById("text").value = "";
 }
 
-renderPosts()
-
+renderPosts();
 </script>
 
 </body>
 </html>
-
-
-
-
 
 
 
