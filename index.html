@@ -42,38 +42,53 @@ button{
 }
 
 /* 네온 버튼 */
-
 .neon-btn{
-  position:relative;
-  padding:10px 25px;
-  font-size:16px;
-  color:white;
-  background:pink;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  transition:transform 0.2s ease;
+ position:relative;
+ background:pink;
+ border:none;
+ padding:12px 28px;
+ border-radius:10px;
+ font-size:16px;
+ cursor:pointer;
+ overflow:hidden;
+ transition:transform .2s;
 }
 
-/* 흰색 네온 테두리 */
-.neon-btn::before{
-  content:'';
-  position:absolute;
-  top:-3px;
-  left:-3px;
-  right:-3px;
-  bottom:-3px;
-  border-radius:10px;
-  background:white;
-  filter:blur(6px);
-  opacity:0.8;
-  z-index:-1;
-}
-
-/* hover 효과 */
 .neon-btn:hover{
-  transform:scale(1.1);
+ transform:scale(1.1);
 }
+
+.neon-btn .text{
+ position:relative;
+ z-index:2;
+ color:white;
+ font-weight:600;
+}
+
+.neon-btn .shimmer{
+ position:absolute;
+ inset:0;
+ border-radius:inherit;
+ pointer-events:none;
+}
+
+.neon-btn[data-effect="spin"] .shimmer::before{
+ content:"";
+ position:absolute;
+ inset:-4px;
+ border-radius:inherit;
+ background:conic-gradient(
+  from 0deg,
+  transparent,
+  white,
+  transparent
+ );
+ animation:spin 2s linear infinite;
+}
+
+@keyframes spin{
+ from{ transform:rotate(0deg); }
+ to{ transform:rotate(360deg); }
 }
 
 </style>
@@ -86,8 +101,9 @@ button{
 
 <textarea id="text"></textarea><br>
 
-<button class="neon-btn" onclick="addPost()">
-<span>등록</span>
+<button class="neon-btn" onclick="addPost()" data-effect="spin">
+<span class="text">등록</span>
+<span class="shimmer"></span>
 </button>
 
 <div id="posts"></div>
@@ -202,6 +218,7 @@ renderPosts()
 
 </body>
 </html>
+
 
 
 
