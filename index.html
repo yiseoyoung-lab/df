@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>테스트 사이트</title>
+<title>이서영 테스트 사이트</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
@@ -43,48 +43,51 @@ button {
 .button {
     --bg: #ff8fb1;
     --radius: 12px;
+    --border-width: 3px;
     position: relative;
     padding: 12px 28px;
     border: none;
     border-radius: var(--radius);
-    background: var(--bg);
+    background: transparent; /* 배경을 투명으로 */
     cursor: pointer;
-    overflow: hidden;
     transition: transform 0.2s;
+    z-index: 0;
 }
-
 .button:hover {
     transform: scale(1.08);
 }
 
+/* 회전하는 conic-gradient — overflow: hidden 없이 바깥에 위치 */
+.button::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--border-width) * -1);   /* 테두리만큼 바깥으로 */
+    border-radius: calc(var(--radius) + var(--border-width));
+    background: conic-gradient(from 0deg, transparent 60%, white 80%, transparent 100%);
+    animation: neon-spin 2s linear infinite;
+    z-index: -1;
+}
+
+/* 안쪽 배경 — 버튼 실제 색상 */
+.button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: var(--bg);
+    z-index: -1;
+}
+
 .button-text {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     color: white;
     font-weight: 600;
 }
 
-/* shimmer layer */
-.shimmer {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-}
-
-/* spinning neon border */
-.neon-button[data-effect="spin"] .shimmer::before {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    border-radius: inherit;
-    background: conic-gradient(from 0deg, transparent, white, transparent);
-    animation: neon-spin 2s linear infinite;
-}
-
 @keyframes neon-spin {
     from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    to   { transform: rotate(360deg); }
 }
 
 /* ------------------ 타이핑 효과 ------------------ */
