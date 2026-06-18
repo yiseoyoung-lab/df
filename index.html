@@ -40,7 +40,6 @@ button {
 }
 
 /* ------------------ 등록 버튼 ------------------ */
-.button {
     --bg: #f0db4f;
     --hover-bg: #ff6b6b;
     position: relative;
@@ -58,8 +57,7 @@ button {
     z-index: 0;
 }
 
-/* hover 색상 레이어 */
-.cyberpunk::before {
+.button::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -68,14 +66,14 @@ button {
     transition: opacity 0.2s;
     z-index: 0;
 }
-.cyberpunk:hover::before {
+.button:hover::before {
     opacity: 1;
 }
-.cyberpunk:hover {
+.button:hover {
     transform: translateY(-3px);
 }
 
-.cyberpunk .button-text {
+.button .button-text {
     position: relative;
     z-index: 1;
     color: inherit;
@@ -105,7 +103,7 @@ button {
 
 <script>
 /* ------------------ 타이핑 효과 ------------------ */
-const text = "욕설 가능! 일 하지말고 월루 해라 😊";
+const text = "오늘 자로 업데이트 😊";
 const typingElement = document.getElementById("typing");
 let index = 0;
 
