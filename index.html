@@ -18,6 +18,7 @@ textarea {
     margin-top: 20px;
 }
 
+/* 일반 버튼 (좋아요, Delete 등) */
 button {
     margin: 5px;
     padding: 8px 15px;
@@ -40,9 +41,11 @@ button {
 }
 
 /* ------------------ 등록 버튼 ------------------ */
+button.button {
     --bg: #f0db4f;
     --hover-bg: #ff6b6b;
     position: relative;
+    margin: 5px;
     padding: 12px 28px;
     border: none;
     background: var(--bg);
@@ -57,7 +60,7 @@ button {
     z-index: 0;
 }
 
-.button::before {
+button.button::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -66,19 +69,22 @@ button {
     transition: opacity 0.2s;
     z-index: 0;
 }
-.button:hover::before {
+
+button.button:hover::before {
     opacity: 1;
 }
-.button:hover {
+
+button.button:hover {
     transform: translateY(-3px);
 }
 
-.button .button-text {
+button.button .button-text {
     position: relative;
     z-index: 1;
     color: inherit;
     font-weight: 600;
 }
+
 /* ------------------ 타이핑 효과 ------------------ */
 #typing {
     font-size: 18px;
@@ -94,16 +100,15 @@ button {
 
 <textarea id="text" placeholder="여기에 글을 입력하세요..."></textarea><br>
 
-<button class="button neon-button" onclick="addPost()" data-effect="spin">
+<button class="button" onclick="addPost()">
   <span class="button-text">등록</span>
-  <span class="shimmer"></span>
 </button>
 
 <div id="posts"></div>
 
 <script>
 /* ------------------ 타이핑 효과 ------------------ */
-const text = "오늘 자로 업데이트 😊";
+const text = "욕설 가능! 일 하지말고 월루 해라 😊";
 const typingElement = document.getElementById("typing");
 let index = 0;
 
@@ -189,11 +194,3 @@ renderPosts();
 
 </body>
 </html>
-
-
-
-
-
-
-
-
