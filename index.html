@@ -253,11 +253,11 @@
 <script>
   let stocks = JSON.parse(localStorage.getItem('stocks') || '[]');
 
-  function openNaver() {
+function openNaver() {
     const name = document.getElementById('stockName').value.trim();
     const query = name || '주식';
-    window.open(`https://finance.naver.com/search/searchList.naver?query=${encodeURIComponent(query)}`, '_blank');
-  }
+    window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(query + ' 주가')}`, '_blank');
+}
 
   function addStock() {
     const name    = document.getElementById('stockName').value.trim();
