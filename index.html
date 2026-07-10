@@ -1,5 +1,38 @@
 <!DOCTYPE html>
 <html>
+
+// 1. HTML — body에 canvas 추가 (선택)
+<div id="petalCanvas"></div>
+
+// 2. CSS — 꽃잎 애니메이션
+.petal {
+  position: fixed;
+  pointer-events: none;
+  font-size: 14px;
+  animation: petalFly 0.8s ease-out forwards;
+}
+@keyframes petalFly {
+  0% { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty))
+         rotate(var(--rot)) scale(0.3); opacity: 0; }
+}
+
+// 3. JS — mousemove 이벤트
+const petals = ['🌸','🌺','✿','❀','🌼','⋆','✦'];
+document.addEventListener('mousemove', (e) => {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  el.textContent = petals[Math.random() * petals.length | 0];
+  el.style.setProperty('--tx', (Math.random()*80-40) + 'px');
+  el.style.setProperty('--ty', (Math.random()*-80-20) + 'px');
+  el.style.setProperty('--rot', (Math.random()*360) + 'deg');
+  el.style.setProperty('--dur', (Math.random()*0.4+0.6) + 's');
+  el.style.left = e.clientX + 'px';
+  el.style.top = e.clientY + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+});
+  
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
