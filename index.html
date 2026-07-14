@@ -14,7 +14,6 @@
   width: var(--size); height: var(--size);
   filter:
   blur(.4px)
-  drop-shadow(0 0 4px currentColor)
   animation: sparkleAnim var(--dur) ease-out forwards;
             mix-blend-mode:screen;
 }
@@ -430,14 +429,14 @@ document.addEventListener('mousemove', e => {
     el.style.cssText = `
       left:${e.clientX}px; top:${e.clientY}px;
       --size:${size};
-      --tx:${Math.random()*40-20}px;
-      --ty:${Math.random()*40-20}px;
+      --tx:${Math.random()*180-30}px;
+      --ty:${Math.random()*180-30}px;
       --rot:${Math.random()*360}deg;
-      --dur:${Math.random()*1.5+1.5}s;
+      --dur:${Math.random()*3+3}s;
     `;
     el.innerHTML = sparkSVG(color);
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), 7000);
+    setTimeout(() => el.remove(), 4000);
   }
 });
 
