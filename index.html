@@ -461,13 +461,13 @@ cat > /mnt/user-data/outputs/stock.html << 'HTMLEOF'
     if (now - sparkLast < 18) return;
     sparkLast = now;
 
-    const count = Math.floor(Math.random() * 4) + 3;
+    const count = Math.floor(Math.random() * 5) + 5;
 
     for (let i = 0; i < count; i++) {
       const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
       const type  = Math.floor(Math.random() * 5);
-      const size  = (Math.random() * 18 + 8) + 'px';
-      const dur   = (Math.random() * 0.8 + 1.0) + 's';
+      const size  = (Math.random() * 15 + 5) + 'px';
+      const dur   = (Math.random() * 1.5 + 2.0) + 's';
       const ox    = (Math.random() * 12 - 6);
       const oy    = (Math.random() * 12 - 6);
 
@@ -477,8 +477,8 @@ cat > /mnt/user-data/outputs/stock.html << 'HTMLEOF'
         left:${e.clientX + ox}px;
         top:${e.clientY + oy}px;
         --size:${size};
-        --tx:${Math.random() * 120 - 60}px;
-        --ty:${Math.random() * -120 - 20}px;
+        --tx:${Math.random() * 200 - 100}px;
+        --ty:${Math.random() * -200 - 100}px;
         --rot:${Math.random() * 540 - 270}deg;
         --dur:${dur};
       `;
