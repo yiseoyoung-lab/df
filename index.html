@@ -15,8 +15,6 @@
   filter:
   blur(.4px)
   drop-shadow(0 0 4px currentColor)
-  drop-shadow(0 0 10px currentColor)
-  drop-shadow(0 0 22px currentColor);
   animation: sparkleAnim var(--dur) ease-out forwards;
             mix-blend-mode:screen;
 }
@@ -435,7 +433,7 @@ document.addEventListener('mousemove', e => {
       --tx:${Math.random()*40-20}px;
       --ty:${Math.random()*40-20}px;
       --rot:${Math.random()*360}deg;
-      --dur:${Math.random()*4+4}s;
+      --dur:${Math.random()*1.5+1.5}s;
     `;
     el.innerHTML = sparkSVG(color);
     document.body.appendChild(el);
