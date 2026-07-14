@@ -1,29 +1,12 @@
+cat > /mnt/user-data/outputs/stock.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주식 손익 계산기</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
-
-    .sparkle {
-  position: fixed; 
-  pointer-events: none;
-  width: var(--size); height: var(--size);
-  filter:
-  blur(.4px)
-  animation: sparkleAnim var(--dur) ease-out forwards;
-            mix-blend-mode:screen;
-}
-@keyframes sparkleAnim {
-  0% { transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
-  100% { transform: translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(0); opacity:0; }
-}
-</head>
-<body>
-  
   @import url(https://fonts.googleapis.com/css?family=Khula:700);
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -35,7 +18,6 @@
     padding: 32px 16px;
   }
 
-  /* 콘솔 타이핑 */
   .console-container {
     font-family: Khula;
     font-size: clamp(1.2em, 4vw, 2.2em);
@@ -82,7 +64,6 @@
 
   .row { display: flex; gap: 8px; }
 
-  /* 모바일에서 행 쌓기 */
   @media (max-width: 480px) {
     .row.wrap-mobile { flex-wrap: wrap; }
     .row.wrap-mobile input { min-width: calc(50% - 4px); }
@@ -136,7 +117,6 @@
   button.button:hover { transform: translateY(-2px); }
   button.button span { position: relative; z-index: 1; }
 
-  /* 모바일에서 추가하기 버튼 꽉 채우기 */
   @media (max-width: 480px) {
     button.button {
       width: 100%;
@@ -189,7 +169,6 @@
   .stock-name { font-size: 15px; font-weight: 600; color: #f0f0f0; }
   .stock-detail { font-size: 11px; color: #555; line-height: 1.6; }
 
-  /* 모바일에서 상세 줄바꿈 */
   @media (max-width: 400px) {
     .stock-detail { font-size: 10px; }
   }
@@ -343,7 +322,6 @@
   .diff-col.down { color: #4d9fff88; }
   .diff-col.same { color: #444; }
 
-  /* 모바일에서 테이블 글자 더 작게 */
   @media (max-width: 400px) {
     table { font-size: 11px; }
     tbody td { padding: 8px 6px; }
@@ -356,10 +334,42 @@
     font-size: 13px;
     padding: 30px 0;
   }
+
+  /* ── 스파클 효과 ── */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    width: var(--size);
+    height: var(--size);
+    z-index: 9999;
+    animation: sparkleAnim var(--dur) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity;
+  }
+  .sparkle svg { width: 100%; height: 100%; overflow: visible; }
+
+  @keyframes sparkleAnim {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1);    opacity: 1; }
+    30%  { opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.1); opacity: 0; }
+  }
+
+  /* 잔상 트레일 */
+  .trail {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 9998;
+    animation: trailAnim var(--dur) ease-out forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes trailAnim {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
 </style>
+</head>
+<body>
 
-
-<!-- 콘솔 타이핑 -->
 <div class='console-container'>
   <span id='text'></span>
   <div class='console-underscore' id='console'>&#95;</div>
@@ -405,42 +415,84 @@
 </div>
 
 <script>
-// ── 스파클 커서 효과 ──
-const sparkColors = ['#FFD700','#FF69B4','#00CFFF','#B388FF','#69FF47','#FF6B6B','#FFA500'];
-let sparkLast = 0;
+  // ── 스파클 커서 효과 ──
+  const sparkColors = [
+    '#FFD700','#FF69B4','#00CFFF','#B388FF',
+    '#69FF47','#FF6B6B','#FFA500','#FF1493',
+    '#00FF7F','#87CEEB','#FFB6C1','#ADFF2F'
+  ];
+  let sparkLast = 0;
+  let mouseX = 0, mouseY = 0;
 
-function sparkSVG(c) {
-  const t = Math.random();
-  if (t < 0.4) return `<svg viewBox="0 0 20 20"><path d="M10 0 L11.5 8.5 L20 10 L11.5 11.5 L10 20 L8.5 11.5 L0 10 L8.5 8.5Z" fill="${c}"/></svg>`;
-  if (t < 0.7) return `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="${c}"/></svg>`;
-  return `<svg viewBox="0 0 20 20"><rect x="8" y="0" width="4" height="20" rx="2" fill="${c}"/><rect x="0" y="8" width="20" height="4" rx="2" fill="${c}"/></svg>`;
-}
-
-document.addEventListener('mousemove', e => {
-  const now = Date.now();
-  if (now - sparkLast < 30) return;
-  sparkLast = now;
-  const count = Math.floor(Math.random() * 10) + 10;
-  for (let i = 0; i < count; i++) {
-    const el = document.createElement('div');
-    el.className = 'sparkle';
-    const size = (Math.random() * 10 + 5) + 'px';
-    const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
-    el.style.cssText = `
-      left:${e.clientX}px; top:${e.clientY}px;
-      --size:${size};
-      --tx:${Math.random()*180-30}px;
-      --ty:${Math.random()*180-30}px;
-      --rot:${Math.random()*360}deg;
-      --dur:${Math.random()*3+3}s;
-    `;
-    el.innerHTML = sparkSVG(color);
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
+  function sparkSVG(c, type) {
+    if (type === 0)
+      return `<svg viewBox="0 0 20 20"><path d="M10 0 L11.8 7.2 L19 10 L11.8 12.8 L10 20 L8.2 12.8 L1 10 L8.2 7.2Z" fill="${c}"/></svg>`;
+    if (type === 1)
+      return `<svg viewBox="0 0 20 20"><path d="M10 1 L12 8 L19 8 L13.5 12.5 L15.5 19.5 L10 15 L4.5 19.5 L6.5 12.5 L1 8 L8 8Z" fill="${c}"/></svg>`;
+    if (type === 2)
+      return `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" fill="${c}"/></svg>`;
+    if (type === 3)
+      return `<svg viewBox="0 0 20 20"><rect x="8.5" y="1" width="3" height="18" rx="1.5" fill="${c}"/><rect x="1" y="8.5" width="18" height="3" rx="1.5" fill="${c}"/></svg>`;
+    return `<svg viewBox="0 0 20 20"><polygon points="10,1 12.5,7.5 19,10 12.5,12.5 10,19 7.5,12.5 1,10 7.5,7.5" fill="${c}"/></svg>`;
   }
-});
 
-  
+  function createTrail(x, y, color) {
+    const el = document.createElement('div');
+    el.className = 'trail';
+    const size = (Math.random() * 8 + 4);
+    const dur  = (Math.random() * 0.6 + 0.8) + 's';
+    el.style.cssText = `
+      left:${x - size/2}px;
+      top:${y - size/2}px;
+      width:${size}px;
+      height:${size}px;
+      background:${color};
+      --dur:${dur};
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1400);
+  }
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    const now = Date.now();
+    if (now - sparkLast < 18) return;
+    sparkLast = now;
+
+    const count = Math.floor(Math.random() * 4) + 3;
+
+    for (let i = 0; i < count; i++) {
+      const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+      const type  = Math.floor(Math.random() * 5);
+      const size  = (Math.random() * 18 + 8) + 'px';
+      const dur   = (Math.random() * 0.8 + 1.0) + 's';
+      const ox    = (Math.random() * 12 - 6);
+      const oy    = (Math.random() * 12 - 6);
+
+      const el = document.createElement('div');
+      el.className = 'sparkle';
+      el.style.cssText = `
+        left:${e.clientX + ox}px;
+        top:${e.clientY + oy}px;
+        --size:${size};
+        --tx:${Math.random() * 120 - 60}px;
+        --ty:${Math.random() * -120 - 20}px;
+        --rot:${Math.random() * 540 - 270}deg;
+        --dur:${dur};
+      `;
+      el.innerHTML = sparkSVG(color, type);
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1800);
+
+      // 잔상 트레일
+      if (Math.random() > 0.4) {
+        setTimeout(() => createTrail(e.clientX + ox, e.clientY + oy, color), i * 30);
+      }
+    }
+  });
+
   // ── 콘솔 타이핑 효과 ──
   consoleText(['내 주식은 오늘도 빨간불 🔴', '존버는 승리한다 💪', '오늘도 파이팅! 📈'], 'text', ['#f0db4f', '#ff6b6b', '#4d9fff']);
 
@@ -707,3 +759,4 @@ document.addEventListener('mousemove', e => {
 </script>
 </body>
 </html>
+HTMLEOF
