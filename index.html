@@ -416,7 +416,7 @@ document.addEventListener('mousemove', e => {
   const now = Date.now();
   if (now - sparkLast < 30) return;
   sparkLast = now;
-  const count = Math.floor(Math.random() * 5) + 5;
+  const count = Math.floor(Math.random() * 8) + 8;
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
     el.className = 'sparkle';
@@ -425,14 +425,14 @@ document.addEventListener('mousemove', e => {
     el.style.cssText = `
       left:${e.clientX}px; top:${e.clientY}px;
       --size:${size};
-      --tx:${Math.random()*120-60}px;
-      --ty:${Math.random()*-120-20}px;
+      --tx:${Math.random()*150-75}px;
+      --ty:${Math.random()*-150-30}px;
       --rot:${Math.random()*360}deg;
-      --dur:${Math.random()*1.2+1.2}s;
+      --dur:${Math.random()*1.5+1.5}s;
     `;
     el.innerHTML = sparkSVG(color);
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), 3000);
+    setTimeout(() => el.remove(), 3500);
   }
 });
 
