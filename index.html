@@ -466,8 +466,8 @@ cat > /mnt/user-data/outputs/stock.html << 'HTMLEOF'
     for (let i = 0; i < count; i++) {
       const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
       const type  = Math.floor(Math.random() * 5);
-      const size  = (Math.random() * 18 + 8) + 'px';
-      const dur   = (Math.random() * 0.8 + 1.0) + 's';
+      const size  = (Math.random() * 12 + 6) + 'px';
+      const dur   = (Math.random() * 1.5 + 2.0) + 's';
       const ox    = (Math.random() * 12 - 6);
       const oy    = (Math.random() * 12 - 6);
 
@@ -477,14 +477,14 @@ cat > /mnt/user-data/outputs/stock.html << 'HTMLEOF'
         left:${e.clientX + ox}px;
         top:${e.clientY + oy}px;
         --size:${size};
-        --tx:${Math.random() * 120 - 60}px;
-        --ty:${Math.random() * -120 - 20}px;
+        --tx:${Math.random() * 200 - 100}px;
+        --ty:${Math.random() * -200 - 100}px;
         --rot:${Math.random() * 540 - 270}deg;
         --dur:${dur};
       `;
       el.innerHTML = sparkSVG(color, type);
       document.body.appendChild(el);
-      setTimeout(() => el.remove(), 1800);
+      setTimeout(() => el.remove(), 4000);
 
       // 잔상 트레일
       if (Math.random() > 0.4) {
