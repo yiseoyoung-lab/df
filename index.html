@@ -1,38 +1,6 @@
 <!DOCTYPE html>
 <html>
 
-// 1. HTML — body에 canvas 추가 (선택)
-<div id="petalCanvas"></div>
-
-// 2. CSS — 꽃잎 애니메이션
-.petal {
-  position: fixed;
-  pointer-events: none;
-  font-size: 14px;
-  animation: petalFly 0.8s ease-out forwards;
-}
-@keyframes petalFly {
-  0% { transform: translate(0,0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty))
-         rotate(var(--rot)) scale(0.3); opacity: 0; }
-}
-
-// 3. JS — mousemove 이벤트
-const petals = ['🌸','🌺','✿','❀','🌼','⋆','✦'];
-document.addEventListener('mousemove', (e) => {
-  const el = document.createElement('div');
-  el.className = 'petal';
-  el.textContent = petals[Math.random() * petals.length | 0];
-  el.style.setProperty('--tx', (Math.random()*80-40) + 'px');
-  el.style.setProperty('--ty', (Math.random()*-80-20) + 'px');
-  el.style.setProperty('--rot', (Math.random()*360) + 'deg');
-  el.style.setProperty('--dur', (Math.random()*0.4+0.6) + 's');
-  el.style.left = e.clientX + 'px';
-  el.style.top = e.clientY + 'px';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
-});
-  
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -372,6 +340,16 @@ document.addEventListener('mousemove', (e) => {
     padding: 30px 0;
   }
 </style>
+  
+  .sparkle {
+  position: fixed; pointer-events: none;
+  width: var(--size); height: var(--size);
+  animation: sparkleAnim var(--dur) ease-out forwards;
+}
+@keyframes sparkleAnim {
+  0% { transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
+  100% { transform: translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(0); opacity:0; }
+}
 </head>
 <body>
 
@@ -421,6 +399,42 @@ document.addEventListener('mousemove', (e) => {
 </div>
 
 <script>
+// ── 스파클 커서 효과 ──
+const sparkColors = ['#FFD700','#FF69B4','#00CFFF','#B388FF','#69FF47','#FF6B6B','#FFA500'];
+let sparkLast = 0;
+
+function sparkSVG(c) {
+  const t = Math.random();
+  if (t < 0.4) return `<svg viewBox="0 0 20 20"><path d="M10 0 L11.5 8.5 L20 10 L11.5 11.5 L10 20 L8.5 11.5 L0 10 L8.5 8.5Z" fill="${c}"/></svg>`;
+  if (t < 0.7) return `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="${c}"/></svg>`;
+  return `<svg viewBox="0 0 20 20"><rect x="8" y="0" width="4" height="20" rx="2" fill="${c}"/><rect x="0" y="8" width="20" height="4" rx="2" fill="${c}"/></svg>`;
+}
+
+document.addEventListener('mousemove', e => {
+  const now = Date.now();
+  if (now - sparkLast < 30) return;
+  sparkLast = now;
+  const count = Math.floor(Math.random() * 3) + 1;
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    const size = (Math.random() * 14 + 8) + 'px';
+    const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
+    el.style.cssText = `
+      left:${e.clientX}px; top:${e.clientY}px;
+      --size:${size};
+      --tx:${Math.random()*70-35}px;
+      --ty:${Math.random()*-70-10}px;
+      --rot:${Math.random()*360}deg;
+      --dur:${Math.random()*0.4+0.5}s;
+    `;
+    el.innerHTML = sparkSVG(color);
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 900);
+  }
+});
+
+  
   // ── 콘솔 타이핑 효과 ──
   consoleText(['내 주식은 오늘도 빨간불 🔴', '존버는 승리한다 💪', '오늘도 파이팅! 📈'], 'text', ['#f0db4f', '#ff6b6b', '#4d9fff']);
 
