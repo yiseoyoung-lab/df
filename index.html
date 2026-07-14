@@ -9,9 +9,16 @@
 <style>
 
     .sparkle {
-  position: fixed; pointer-events: none;
+  position: fixed; 
+  pointer-events: none;
   width: var(--size); height: var(--size);
+  filter:
+  blur(.4px)
+  drop-shadow(0 0 4px currentColor)
+  drop-shadow(0 0 10px currentColor)
+  drop-shadow(0 0 22px currentColor);
   animation: sparkleAnim var(--dur) ease-out forwards;
+            mix-blend-mode:screen;
 }
 @keyframes sparkleAnim {
   0% { transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
@@ -425,14 +432,14 @@ document.addEventListener('mousemove', e => {
     el.style.cssText = `
       left:${e.clientX}px; top:${e.clientY}px;
       --size:${size};
-      --tx:${Math.random()*180-90}px;
-      --ty:${Math.random()*-180-30}px;
+      --tx:${Math.random()*40-20}px;
+      --ty:${Math.random()*40-20}px;
       --rot:${Math.random()*360}deg;
-      --dur:${Math.random()*2+2}s;
+      --dur:${Math.random()*4+4}s;
     `;
     el.innerHTML = sparkSVG(color);
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), 3500);
+    setTimeout(() => el.remove(), 7000);
   }
 });
 
