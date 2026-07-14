@@ -416,17 +416,17 @@ document.addEventListener('mousemove', e => {
   const now = Date.now();
   if (now - sparkLast < 30) return;
   sparkLast = now;
-  const count = Math.floor(Math.random() * 8) + 8;
+  const count = Math.floor(Math.random() * 10) + 10;
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
     el.className = 'sparkle';
-    const size = (Math.random() * 12 + 6) + 'px';
+    const size = (Math.random() * 10 + 5) + 'px';
     const color = sparkColors[Math.floor(Math.random() * sparkColors.length)];
     el.style.cssText = `
       left:${e.clientX}px; top:${e.clientY}px;
       --size:${size};
-      --tx:${Math.random()*150-75}px;
-      --ty:${Math.random()*-150-30}px;
+      --tx:${Math.random()*180-90}px;
+      --ty:${Math.random()*-180-30}px;
       --rot:${Math.random()*360}deg;
       --dur:${Math.random()*1.5+1.5}s;
     `;
