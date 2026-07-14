@@ -7,6 +7,19 @@
 <title>주식 손익 계산기</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
+
+    .sparkle {
+  position: fixed; pointer-events: none;
+  width: var(--size); height: var(--size);
+  animation: sparkleAnim var(--dur) ease-out forwards;
+}
+@keyframes sparkleAnim {
+  0% { transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
+  100% { transform: translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(0); opacity:0; }
+}
+</head>
+<body>
+  
   @import url(https://fonts.googleapis.com/css?family=Khula:700);
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -340,18 +353,7 @@
     padding: 30px 0;
   }
 </style>
-  
-  .sparkle {
-  position: fixed; pointer-events: none;
-  width: var(--size); height: var(--size);
-  animation: sparkleAnim var(--dur) ease-out forwards;
-}
-@keyframes sparkleAnim {
-  0% { transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
-  100% { transform: translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(0); opacity:0; }
-}
-</head>
-<body>
+
 
 <!-- 콘솔 타이핑 -->
 <div class='console-container'>
